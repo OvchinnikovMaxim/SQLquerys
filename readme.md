@@ -7,3 +7,4 @@
 Инструкция по компиляции
 1. Скачать папку SQLquerys и файл SQLquerys.sln в одну папку
 2. Открыть через Visual Studio или SharpDevelop и скомпилировать
+
