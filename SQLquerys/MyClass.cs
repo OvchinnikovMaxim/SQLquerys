@@ -77,7 +77,7 @@ namespace SQLquerys
 		public string NCSD(string login, string name, string surname, int userID)
 		{
 			string query=@"SELECT 
-							cu.id AS 'ИД сотрудника для ncsd.ru', 
+							cu.id AS 'ИД сотрудника для ncsd',
 							cu.login AS 'Логин',
 							cu.password AS 'Пароль',
 							cu.del AS 'Пометка на удаление',	
