@@ -696,7 +696,7 @@ insert into  nefco.dbo.distr_limit_sales  (distr_id, limit)
 		/// <returns>Строка запроса</returns>
 		public string search_TEK(string name)
 		{
-			string query=@"select cc.del, cc.factory_id, cc.active, cc.name,
+			string query=@"select cc.del, cc.factory_id, cc.class, cc.active, cc.name,
 							ccac.contractor_id, 
 							ccac.contract_number, 
 							ccac.address,
