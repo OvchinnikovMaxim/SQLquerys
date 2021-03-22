@@ -606,7 +606,7 @@ insert into  nefco.dbo.distr_limit_sales  (distr_id, limit)
 		/// <param name="login">логин</param>
 		/// <param name="userID">идентификатор сотрудника, который добавил ТЭК</param>
 		/// <returns>Строка запроса</returns>
-		public string new_TEK(string name, int zavod,string dogovor, string address, string r_s, string bank, string k_s, string bik, string inn, string kpp, DateTime date_n, string pass, string login, int userID)
+		public string new_TEK(string name, int zavod,string dogovor, string address, string r_s, string bank, string k_s, string bik, string inn, string kpp, DateTime date_n, string pass, string login, int userID, int clas)
 		{
 			string query=@"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
 						DECLARE @ALL_IS_OK int = 0;
@@ -642,9 +642,10 @@ insert into  nefco.dbo.distr_limit_sales  (distr_id, limit)
 						BEGIN TRANSACTION New_tek
 						BEGIN TRY	
 							INSERT INTO nefco.dbo.co_contractor(name,      class,  del, factory_id,  active)
-														VALUES (@name_tek, 20,     0,   @factory_id, 1)
-						
-							SET @contractor_id = (SELECT IDENT_CURRENT('nefco.dbo.[co_contractor]'));
+														VALUES (@name_tek, " + clas + ",     0,   @factory_id, 1)"+
+
+
+							@"SET @contractor_id = (SELECT IDENT_CURRENT('nefco.dbo.[co_contractor]'));
 						
 							INSERT INTO nefco.dbo.co_contractor_attr_transp
 												(contractor_id,  contract_number,  address,  settlement_account,  bank_name,  loro_account,  bik,  inn,  kpp,  contract_date) 
@@ -657,15 +658,15 @@ insert into  nefco.dbo.distr_limit_sales  (distr_id, limit)
 							
 						
 						  DECLARE @log_id INT;
-						  DECLARE @user_id INT = "+userID+";"+
+						  DECLARE @user_id INT = " + userID+";"+
 						  @"DECLARE @prgm_id INT = 6;              
 						  DECLARE @tag_id INT = 120;            
 						
 						  EXEC nefco.dbo.co_log_insert @user_id, @prgm_id, @tag_id, @contractor_id, @log_id OUTPUT;
 						  DECLARE @log_detail_id INT;
 						  EXEC nefco.dbo.co_log_detail_insert @log_id, 'наименование', @name_tek, @log_detail_id OUTPUT;
-						  EXEC nefco.dbo.co_log_detail_insert @log_id, 'класс', 20, @log_detail_id OUTPUT;
-						  EXEC nefco.dbo.co_log_detail_insert @log_id, 'завод', @factory_id, @log_detail_id OUTPUT;
+						  EXEC nefco.dbo.co_log_detail_insert @log_id, 'класс', "+clas+", @log_detail_id OUTPUT;"+
+						  @"EXEC nefco.dbo.co_log_detail_insert @log_id, 'завод', @factory_id, @log_detail_id OUTPUT;
 						  EXEC nefco.dbo.co_log_detail_insert @log_id, 'Номер договора', @contract_number, @log_detail_id OUTPUT;
 						  EXEC nefco.dbo.co_log_detail_insert @log_id, 'Адрес', @address, @log_detail_id OUTPUT; 
 						  EXEC nefco.dbo.co_log_detail_insert @log_id, 'Расчетный счет', @settlement_account, @log_detail_id OUTPUT;
@@ -723,7 +724,7 @@ insert into  nefco.dbo.distr_limit_sales  (distr_id, limit)
 							nefco.dbo.co_contractor cc 
 							join nefco.dbo.co_contractor_attr_transp ccac on ccac.contractor_id=cc.id
 							
-							where cc.class=20 and cc.name like '%"+name+"%'";
+							where cc.name like '%"+name+"%'";
 			return query;
 		}
 		
