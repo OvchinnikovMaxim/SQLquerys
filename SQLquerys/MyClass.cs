@@ -439,7 +439,7 @@ insert into  nefco.dbo.distr_limit_sales  (distr_id, limit)
 							
 							@"declare @employeeTo int = '1317';
 							declare @distrTo varchar(10);
-							set @distrTo = (select @distrTo from nefco.dbo.co_contractor_attr_customer where contractor_id=@contractorTo)
+							set @distrTo = (select distr_id from nefco.dbo.co_contractor_attr_customer where contractor_id=@contractorTo)
 							if ISNULL(@contractorTo, 0) = 0 BEGIN
 								PRINT 'contractor_id not found';
 								RETURN;
